@@ -1,6 +1,6 @@
 # Projekt Kuva
 
-Hetkel kasutusel olevad teegid:
+Kasutatud teegid:
 
 1. [SpeechRecognition](https://pypi.org/project/SpeechRecognition/)
 2. [PyAudio](https://pypi.org/project/PyAudio/)
