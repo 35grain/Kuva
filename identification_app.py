@@ -1,12 +1,16 @@
+from datetime import *
+import easygui
 import speech_recognition as sr
 import pyttsx3
-from google_calendar import display_calendar
+from google_calendar import kuva_kalender
+
 r = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices') 
 engine.setProperty('voice', voices[3].id)
 
 nimed = ('Uku','Richard')
+päeva_osad = ('hommikust','päevast','õhtust')
 
 def isikusta(sisend, nimed):
     try:
@@ -14,8 +18,6 @@ def isikusta(sisend, nimed):
             for nimi in nimed:
                 if nimi.lower() in variant['transcript'].lower():
                     isik = nimi
-                    engine.say("Tere hommikust "+ isik +" !")
-                    engine.runAndWait()
                     return isik
                 else:
                     isik = None
@@ -37,9 +39,32 @@ with sr.Microphone() as source:
     sisend = r.recognize_google(data,show_all=True,language="fi")
 
 isik = isikusta(sisend,nimed)
-    
+
+#Display selection of names if unable to identify
 if isik == None:
     engine.say("Ma ei saanud aru. Palun vali oma nimi ekraanilt.")
     engine.runAndWait()
+    vajutati = easygui.choicebox("Valige oma nimi ekraanilt", choices = nimed)
+    if vajutati == None:
+        easygui.msgbox("Sa ei valinud midagi!")
+    else:
+        isik = vajutati
+        kuva_kalender(isik)
 else:
-    display_calendar(isik)
+    #Greet based on time of the day
+    osa_päevast = ""
+    tund = int(datetime.now().strftime("%H"))
+    if tund < 3 or tund > 16:
+        osa_päevast = päeva_osad[2]
+    elif tund > 3:
+        osa_päevast = päeva_osad[0]
+    else:
+        osa_päevast = päeva_osad[1
+                                 ]
+    engine.say("Tere " + osa_päevast + " , " + isik + " !")
+    engine.runAndWait()
+    kuva_kalender(isik)
+
+
+
+
