@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-def display_calendar(USER_ID):
+def kuva_kalender(USER_ID):
     # User ID from identification application
 
     # If modifying these scopes, delete the file token.pickle.
@@ -37,49 +37,52 @@ def display_calendar(USER_ID):
     # Check for list of calendars
     page_token = None
     while True:
-      calendar_list = service.calendarList().list(pageToken=page_token).execute()
-      page_token = calendar_list.get('nextPageToken')
+      kalendrid = service.calendarList().list(pageToken=page_token).execute()
+      page_token = kalendrid.get('nextPageToken')
       if not page_token:
         break
 
     events = []
 
     # Call the Calendar API
-    now = datetime.now().isoformat()
-    end_of_day = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)).isoformat()
-    easygui.msgbox('Getting the events for today',date.today().strftime("%d.%m.%Y"))
+    praegu = datetime.now().isoformat()
+    päeva_lõpp = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)).isoformat()
 
     # Get events from all calendars
-    for calendar in calendar_list['items']:
+    for calendar in kalendrid['items']:
         id=calendar['id']
-        events_result = service.events().list(calendarId=id, timeMin=now + '+02:00',
-                                            timeMax=end_of_day + '+02:00', singleEvents=True,
-                                            orderBy="startTime", maxResults=10).execute()
+        events_result = service.events().list(calendarId=id, timeMin=praegu + '+02:00',
+                                            timeMax=päeva_lõpp + '+02:00', singleEvents=True,
+                                            orderBy='startTime', maxResults=10).execute()
         events += events_result.get('items', [])
 
     # Output list of events
     if not events:
-        easygui.msgbox('No upcoming events today.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        end = event['end'].get('dateTime', event['end'].get('date'))
-        location = ""
-        if len(start) < 11:
-            start = start.replace("-",".")
-            end = end.replace("-",".")
-        
-        split1 = start.split("T")
-        sõne1 = split1[1]
-        split2 = sõne1.split("+")
-        start = split2[0]
+        kuva_sündmusi = 'Tänaseks ei ole rohkem sündmusi kirjas.'
+    else:
+        kuva_sündmusi = 'Sinu tänased sündmused:\n\n'
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            end = event['end'].get('dateTime', event['end'].get('date'))
+            toimumispaik = ''
+            if len(start) < 11:
+                start = start.replace('-','.')
+                end = end.replace('-','.')
+            
+            split1 = start.split('T')
+            sõne1 = split1[1]
+            split2 = sõne1.split('+')
+            start = split2[0]
 
-        split3 = end.split("T")
-        sõne2 = split3[1]
-        split4 = sõne2.split("+")
-        end = split4[0]
-        
-        try:
-            location = event['location']
-            easygui.msgbox(start + "-" + end + "\n" + event["summary"] + "\n" + event["location"])
-        except:
-            easygui.msgbox(start + "-" + end + "\n" + event["summary"])
+            split3 = end.split('T')
+            sõne2 = split3[1]
+            split4 = sõne2.split('+')
+            end = split4[0]
+            
+            try:
+                toimumispaik = event['toimumispaik']
+                kuva_sündmusi += start + '-' + end + '\n' + event['summary'] + '\n' + event['toimumispaik'] + '\n'
+            except:
+                kuva_sündmusi += start + '-' + end + '\n' + event['summary'] + '\n'
+    
+    easygui.msgbox(kuva_sündmusi,date.today().strftime('%d.%m.%Y'))
