@@ -1,6 +1,7 @@
+import easygui
 import speech_recognition as sr
 import pyttsx3
-from google_calendar import display_calendar
+from calendareasygui import display_calendar
 r = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices') 
@@ -41,5 +42,12 @@ isik = isikusta(sisend,nimed)
 if isik == None:
     engine.say("Ma ei saanud aru. Palun vali oma nimi ekraanilt.")
     engine.runAndWait()
+    variandid = ["Uku", "Richard"]
+    vajutati = easygui.choicebox("Valige oma nimi ekraanilt", choices = variandid)
+    if vajutati == None:
+        easygui.msgbox("Sa ei valinud midagi!")
+    else:
+        isik = vajutati
+        display_calendar(isik)
 else:
     display_calendar(isik)

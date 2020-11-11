@@ -1,5 +1,6 @@
 from __future__ import print_function
 from datetime import *
+import easygui
 import pickle
 import os.path
 from googleapiclient.discovery import build
@@ -46,7 +47,7 @@ def display_calendar(USER_ID):
     # Call the Calendar API
     now = datetime.now().isoformat()
     end_of_day = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)).isoformat()
-    print('Getting the events for today',date.today().strftime("%d.%m.%Y"))
+    easygui.msgbox('Getting the events for today',date.today().strftime("%d.%m.%Y"))
 
     # Get events from all calendars
     for calendar in calendar_list['items']:
@@ -58,22 +59,27 @@ def display_calendar(USER_ID):
 
     # Output list of events
     if not events:
-        print('No upcoming events today.')
+        easygui.msgbox('No upcoming events today.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         end = event['end'].get('dateTime', event['end'].get('date'))
         location = ""
-        print()
         if len(start) < 11:
             start = start.replace("-",".")
             end = end.replace("-",".")
-            print(start,"-",end)
-        else:
-            print(start,"-",end)
-        print(event['summary'])
+        
+        split1 = start.split("T")
+        sõne1 = split1[1]
+        split2 = sõne1.split("+")
+        start = split2[0]
+
+        split3 = end.split("T")
+        sõne2 = split3[1]
+        split4 = sõne2.split("+")
+        end = split4[0]
+        
         try:
             location = event['location']
-            print(location)
+            easygui.msgbox(start + "-" + end + "\n" + event["summary"] + "\n" + event["location"])
         except:
-            pass
-
+            easygui.msgbox(start + "-" + end + "\n" + event["summary"])
