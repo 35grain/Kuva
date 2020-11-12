@@ -56,11 +56,10 @@ else:
     tund = int(datetime.now().strftime("%H"))
     if tund < 3 or tund > 16:
         osa_päevast = päeva_osad[2]
-    elif tund > 3:
+    elif tund > 3 and tund < 12:
         osa_päevast = päeva_osad[0]
     else:
-        osa_päevast = päeva_osad[1
-                                 ]
+        osa_päevast = päeva_osad[1]
     engine.say("Tere " + osa_päevast + " , " + isik + " !")
     engine.runAndWait()
     kuva_kalender(isik)
