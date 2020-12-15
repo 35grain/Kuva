@@ -3,6 +3,8 @@ import speech_recognition as sr
 import pyttsx3
 from google_calendar import kuva_kalender
 import PySimpleGUI as sg
+from Uudis import hangi_uudis
+import webbrowser
 
 r = sr.Recognizer()
 engine = pyttsx3.init()
@@ -16,14 +18,17 @@ def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge")]] 
     return sg.Window("Avaleht", layout)
 def createwindow2():
-    layout2 = [[sg.Text("Ilmateade")], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Ilm", layout2)
+    layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
+    return sg.Window("Ilm", layout)
 def createwindow3(sündmused):
-    layout3 = [[sg.Text(sündmused)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Sündmused", layout3)
+    layout = [[sg.Text(sündmused)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
+    return sg.Window("Sündmused", layout)
 def createwindow4():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Sulge")]] 
+    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge")]] 
     return sg.Window("Avaleht", layout)
+def createwindow5(uudis):
+    layout = [[sg.Text("Vajuta siia", enable_events=True, key=uudis)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
+    return sg.Window("Uudis", layout)
 
 def isikusta(sisend, nimed):
     try:
@@ -109,16 +114,38 @@ while True:
         elif event == "Tagasi":
             window3.close()
             continue
+    elif event == "Uudis":
+        vajutus = "Uudis"
+        uudis = hangi_uudis()
+        window.close()
+        window5 = createwindow5(uudis)
+        event, values = window5.read()
+        if event == "Sulge" or event == sg.WIN_CLOSED:
+            break
+        elif event == "Tagasi":
+            window5.close()
+            continue
+        elif event == uudis:
+            window5.close()
+            webbrowser.open(uudis)
 
 try:
     window.close()
 except:
-    x = 3
+    nevermind_me = False
 try:
     window2.close()
 except:
-    x = 3
+    nevermind_me = False
 try:
     window3.close()
 except:
-    x = 3
+    nevermind_me = False
+try:
+    window4.close()
+except:
+    nevermind_me = False
+try:
+    window5.close()
+except:
+    nevermind_me = False
