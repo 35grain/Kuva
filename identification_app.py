@@ -3,12 +3,12 @@ import speech_recognition as sr
 import pyttsx3
 from google_calendar import kuva_kalender
 import PySimpleGUI as sg
-from Uudis import hangi_uudis
+from uudis import hangi_uudis
 import webbrowser
 
 r = sr.Recognizer()
 engine = pyttsx3.init()
-voices = engine.getProperty('voices') 
+voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[3].id)
 
 nimed = ('Uku','Richard')
@@ -68,11 +68,8 @@ if isik == None:
         if event == "Sulge" or event == sg.WIN_CLOSED:
             window.close()
             break
-        elif event == "Richard":
-            isik = "Richard"
-            break
-        elif event == "Uku":
-            isik = "Uku"
+        else:
+            isik = event
             break
     window.close()
 else:
@@ -88,7 +85,7 @@ else:
     engine.say("Tere " + osa_päevast + " , " + isik + " !")
     engine.runAndWait()
     
-while True:
+while isik != None:
     window = createwindow4()
     event, values = window.read()
     if event == "Sulge" or event == sg.WIN_CLOSED:

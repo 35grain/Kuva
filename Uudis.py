@@ -1,25 +1,16 @@
 from bs4 import BeautifulSoup
 import urllib.request
 import re
+from random import choice
 
 def hangi_uudis():
-    n = 0
-    a = urllib.request.urlopen("https://leht.postimees.ee/")
+    a = urllib.request.urlopen("https://uudised.err.ee/")
     data = a.read()
     soup = BeautifulSoup(data, features="html.parser")
-    for link in soup.find_all('a'):
-        ilus_link = link.get('href')
-        if n == 3:
-            break
-        if re.match("https://leht.postimees.ee", ilus_link):
-            if re.match("https://leht.postimees.ee/section", ilus_link):
-                x = False
-            elif re.match("https://leht.postimees.ee/", ilus_link):
-                if n == 2:
-                    uudis = ilus_link
-                    n += 1
-                else:
-                    n += 1
+    news = []
+    for article in soup.find_all('article'):
+        url = article.a['href']
+        if url and (re.match("//uudised.err.ee/", url) or re.match("//www.err.ee/", url)):
+            news += ["https:"+url]
                 
-    return uudis
-            
+    return choice(news)
