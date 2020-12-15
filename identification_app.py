@@ -16,19 +16,19 @@ päeva_osad = ('hommikust','päevast','õhtust')
 
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge")]] 
-    return sg.Window("Avaleht", layout)
+    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 def createwindow2():
     layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Ilm", layout)
+    return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 def createwindow3(sündmused):
     layout = [[sg.Text(sündmused)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Sündmused", layout)
+    return sg.Window("Sündmused", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 def createwindow4():
     layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge")]] 
-    return sg.Window("Avaleht", layout)
+    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 def createwindow5(uudis):
     layout = [[sg.Text("Vajuta siia", enable_events=True, key=uudis)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Uudis", layout)
+    return sg.Window("Uudis", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 
 def isikusta(sisend, nimed):
     try:
@@ -91,7 +91,6 @@ while isik != None:
     if event == "Sulge" or event == sg.WIN_CLOSED:
         break
     elif event == "Ilmateade":
-        vajutus = "Ilm"
         window.close()
         window2 = createwindow2()
         event, values = window2.read()
@@ -101,7 +100,6 @@ while isik != None:
             window2.close()
             continue
     elif event == "Sündmused":
-        vajutus = "Sündmus"
         sündmused = kuva_kalender(isik)
         window.close()
         window3 = createwindow3(sündmused)
@@ -112,7 +110,6 @@ while isik != None:
             window3.close()
             continue
     elif event == "Uudis":
-        vajutus = "Uudis"
         uudis = hangi_uudis()
         window.close()
         window5 = createwindow5(uudis)
