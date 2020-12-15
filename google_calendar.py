@@ -1,11 +1,11 @@
 from __future__ import print_function
 from datetime import *
-import easygui
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import PySimpleGUI as sg
 
 def kuva_kalender(USER_ID):
     # User ID from identification application
@@ -85,4 +85,4 @@ def kuva_kalender(USER_ID):
             except:
                 kuva_sündmusi += start + '-' + end + '\n' + event['summary'] + '\n'
     
-    easygui.msgbox(kuva_sündmusi,date.today().strftime('%d.%m.%Y'))
+    return kuva_sündmusi
