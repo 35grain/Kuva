@@ -3,33 +3,41 @@ import speech_recognition as sr
 import pyttsx3
 from google_calendar import kuva_kalender
 import PySimpleGUI as sg
+from win32api import GetSystemMetrics
 from uudis import hangi_uudis
 import webbrowser
 
+# Set up voice recognition and text to speech
 r = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[3].id)
 
+# Get display height
+height = GetSystemMetrics(1)
+
 nimed = ('Uku','Richard')
 päeva_osad = ('hommikust','päevast','õhtust')
 
-def createwindow():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge")]] 
-    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
-def createwindow2():
-    layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
-def createwindow3(sündmused):
-    layout = [[sg.Text(sündmused)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Sündmused", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
-def createwindow4():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge")]] 
-    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
-def createwindow5(uudis):
-    layout = [[sg.Text("Vajuta siia", enable_events=True, key=uudis)], [sg.Button("Tagasi")], [sg.Button("Sulge")]]
-    return sg.Window("Uudis", layout, no_titlebar=True, element_justification='c', size=(800,600)).Finalize()
 
+# Set up GUI elements
+def createwindow():
+    layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
+    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+def createwindow2():
+    layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+def createwindow3(sündmused):
+    layout = [[sg.Text(sündmused)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("Sündmused", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+def createwindow4():
+    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge rakendus")]] 
+    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+def createwindow5(uudis):
+    layout = [[sg.Text("Vajuta siia", enable_events=True, key=uudis)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("Uudis", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+
+# Function for identifying users
 def isikusta(sisend, nimed):
     try:
         for variant in sisend['alternative']:
@@ -65,7 +73,7 @@ if isik == None:
     while True:
         window = createwindow()
         event, values = window.read()
-        if event == "Sulge" or event == sg.WIN_CLOSED:
+        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             window.close()
             break
         else:
@@ -88,13 +96,13 @@ else:
 while isik != None:
     window = createwindow4()
     event, values = window.read()
-    if event == "Sulge" or event == sg.WIN_CLOSED:
+    if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
         break
     elif event == "Ilmateade":
         window.close()
         window2 = createwindow2()
         event, values = window2.read()
-        if event == "Sulge" or event == sg.WIN_CLOSED:
+        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
         elif event == "Tagasi":
             window2.close()
@@ -104,7 +112,7 @@ while isik != None:
         window.close()
         window3 = createwindow3(sündmused)
         event, values = window3.read()
-        if event == "Sulge" or event == sg.WIN_CLOSED:
+        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
         elif event == "Tagasi":
             window3.close()
@@ -114,7 +122,7 @@ while isik != None:
         window.close()
         window5 = createwindow5(uudis)
         event, values = window5.read()
-        if event == "Sulge" or event == sg.WIN_CLOSED:
+        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
         elif event == "Tagasi":
             window5.close()
