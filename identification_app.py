@@ -18,6 +18,8 @@ engine.setProperty('voice', voices[3].id)
 width = GetSystemMetrics(0)
 height = GetSystemMetrics(1)
 
+sg.theme('Dark Blue')
+
 nimed = ('Uku','Richard')
 päeva_osad = ('hommikust','päevast','õhtust')
 
@@ -25,10 +27,10 @@ päeva_osad = ('hommikust','päevast','õhtust')
 # Set up GUI elements
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
-    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Avaleht", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow2(weather):
     layout = [[sg.Text("Praegune ilm: " + "\n" + weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Ilm", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow3(events):
     layout = [[sg.Text(events)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("events", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
