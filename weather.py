@@ -17,8 +17,8 @@ def get_weather():
         z = x["weather"]
         weather_description = z[0]["description"]
         wind = e["speed"]
-        tulemus = []
-        tulemus += [celsius]
-        tulemus += [weather_description]
-        tulemus += [wind]
-    return tulemus
+        result = []
+        result += [celsius]
+        result += [weather_description]
+        result += [wind]
+    return result

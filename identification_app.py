@@ -31,7 +31,7 @@ def createwindow():
     layout = [[sg.Text("Valikud:", font=("Helvetica", 20))], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Kes sa oled?", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow2(weather):
-    layout = [[sg.Text("Praegune ilm:", font=("Helvetica", 20))], [sg.Text(weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    layout = [[sg.Text("Praegune ilm Tartus:", font=("Helvetica", 20))], [sg.Text(weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Ilm", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow3(events):
     layout = [[sg.Text("Sinu tänased sündmused:", font=("Helvetica", 20))], [sg.Text(events)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
