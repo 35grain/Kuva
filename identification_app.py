@@ -1,12 +1,13 @@
 from datetime import *
 import speech_recognition as sr
 import pyttsx3
-from google_calendar import display_schedule
 import PySimpleGUI as sg
 from win32api import GetSystemMetrics
-from news import get_news
 import webbrowser
+
+from google_calendar import display_schedule
 from weather import get_weather
+from news import get_news
 
 # Set up voice recognition and text to speech
 r = sr.Recognizer()
@@ -18,13 +19,13 @@ engine.setProperty('voice', voices[3].id)
 width = GetSystemMetrics(0)
 height = GetSystemMetrics(1)
 
-sg.theme('Dark Blue')
-
+# Set up variables
 names = ('Uku','Richard')
 parts_of_day = ('hommikust','päevast','õhtust')
 
-
 # Set up GUI elements
+sg.theme('Dark Blue')
+
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Kes sa oled?", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
