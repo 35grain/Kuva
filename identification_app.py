@@ -6,6 +6,7 @@ import PySimpleGUI as sg
 from win32api import GetSystemMetrics
 from uudis import hangi_uudis
 import webbrowser
+from weather import hangi_ilm
 
 # Set up voice recognition and text to speech
 r = sr.Recognizer()
@@ -24,8 +25,8 @@ päeva_osad = ('hommikust','päevast','õhtust')
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
-def createwindow2():
-    layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+def createwindow2(ilm):
+    layout = [[sg.Text("Praegune ilm: " + "\n" + ilm)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
 def createwindow3(sündmused):
     layout = [[sg.Text(sündmused)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
@@ -99,8 +100,15 @@ while isik != None:
     if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
         break
     elif event == "Ilmateade":
+        algne_ilm = hangi_ilm()
+        temperatuur = algne_ilm[0]
+        kirjeldus = algne_ilm[1]
+        tuul = algne_ilm[2]
+        ilm = ("Temperatuur on: " + str(temperatuur) + "°C" +
+               "\n" + "Tuule kiirus on: " + str(tuul) + "m/s." +
+               "\n" + "Ilma kirjeldus on: " + kirjeldus + ".")
         window.close()
-        window2 = createwindow2()
+        window2 = createwindow2(ilm)
         event, values = window2.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
