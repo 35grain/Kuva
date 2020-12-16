@@ -43,7 +43,7 @@ def createwindow5(news):
     layout = [[sg.Text(news['title'], font=("Helvetica", 20))], [sg.Text(news['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Uudised", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow6():
-    layout = [[sg.Text("Isikutuvastus", font=("Helvetica", 20))], [sg.Button("Tuvastus")], [sg.Button("Sulge rakendus")]] 
+    layout = [[sg.Text("Isikutuvastus", font=("Helvetica", 20))], [sg.Text("Vajuta nupul 'Tuvasta', et alustada")], [sg.Button("Tuvastus")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Kes sa oled?", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
@@ -119,14 +119,14 @@ while True:
             if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
                 break
             elif event == "Ilmateade":
-                algne_weather = get_weather()
-                temperatuur = algne_weather[0]
-                algne = algne_weather[1]
-                tuul = algne_weather[2]
-                kirjeldus = translate(algne)
-                weather = ("Temperatuur on: " + str(temperatuur) + "°C" +
-                       "\n" + "Tuule kiirus on: " + str(tuul) + "m/s." +
-                       "\n" + "ilm: " + kirjeldus + ".")
+                initial_weather = get_weather()
+                temperature = initial_weather[0]
+                initial = initial_weather[1]
+                wind = initial_weather[2]
+                description = translate(initial)
+                weather = ("Temperatuur on: " + str(temperature) + "°C" +
+                       "\n" + "Tuule kiirus on: " + str(wind) + "m/s." +
+                       "\n" + "Olustik: " + description + ".")
                 window.close()
                 window2 = createwindow2(weather)
                 window2.Maximize()
