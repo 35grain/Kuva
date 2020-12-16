@@ -14,6 +14,7 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[3].id)
 
 # Get display height
+width = GetSystemMetrics(0)
 height = GetSystemMetrics(1)
 
 nimed = ('Uku','Richard')
@@ -23,19 +24,19 @@ päeva_osad = ('hommikust','päevast','õhtust')
 # Set up GUI elements
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
-    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Avaleht", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow2():
     layout = [[sg.Text("Ilmateade")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Ilm", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow3(sündmused):
     layout = [[sg.Text(sündmused)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Sündmused", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Sündmused", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow4():
     layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge rakendus")]] 
-    return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    return sg.Window("Avaleht", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow5(uudis):
-    layout = [[sg.Text("Vajuta siia", enable_events=True, key=uudis)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Uudis", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
+    layout = [[sg.Text(uudis['title'], font=("Helvetica", 25))], [sg.Text(uudis['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("Uudis", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
 def isikusta(sisend, nimed):
@@ -72,6 +73,7 @@ if isik == None:
     engine.runAndWait()
     while True:
         window = createwindow()
+        window.Maximize()
         event, values = window.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             window.close()
@@ -95,12 +97,14 @@ else:
     
 while isik != None:
     window = createwindow4()
+    window.Maximize()
     event, values = window.read()
     if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
         break
     elif event == "Ilmateade":
         window.close()
         window2 = createwindow2()
+        window2.Maximize()
         event, values = window2.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
@@ -111,6 +115,7 @@ while isik != None:
         sündmused = kuva_kalender(isik)
         window.close()
         window3 = createwindow3(sündmused)
+        window3.Maximize()
         event, values = window3.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
@@ -121,16 +126,17 @@ while isik != None:
         uudis = hangi_uudis()
         window.close()
         window5 = createwindow5(uudis)
+        window5.Maximize()
         event, values = window5.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
             break
         elif event == "Tagasi":
             window5.close()
             continue
-        elif event == uudis:
+        elif event == "Loe edasi":
             window5.close()
-            webbrowser.open(uudis)
-
+            webbrowser.open(uudis['link'])
+            
 try:
     window.close()
 except:

@@ -52,7 +52,7 @@ def kuva_kalender(USER_ID):
     for calendar in kalendrid['items']:
         id=calendar['id']
         events_result = service.events().list(calendarId=id, timeMin=praegu + '+02:00',
-                                            timeMax=päeva_lõpp + '+02:00', singleEvents=True,
+                                            timeMax=päeva_lõpp + '+02:00', timeZone='+02:00', singleEvents=True,
                                             orderBy='startTime', maxResults=10).execute()
         events += events_result.get('items', [])
 
