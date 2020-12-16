@@ -21,7 +21,7 @@ height = GetSystemMetrics(1)
 sg.theme('Dark Blue')
 
 names = ('Uku','Richard')
-päeva_osad = ('hommikust','päevast','õhtust')
+parts_of_day = ('hommikust','päevast','õhtust')
 
 
 # Set up GUI elements
@@ -87,15 +87,15 @@ if person == None:
     window.close()
 else:
     #Greet based on time of the day
-    osa_päevast = ""
+    part_of_day = ""
     tund = int(datetime.now().strftime("%H"))
     if tund < 3 or tund > 16:
-        osa_päevast = päeva_osad[2]
+        part_of_day = parts_of_day[2]
     elif tund > 3 and tund < 12:
-        osa_päevast = päeva_osad[0]
+        part_of_day = parts_of_day[0]
     else:
-        osa_päevast = päeva_osad[1]
-    engine.say("Tere " + osa_päevast + " , " + person + " !")
+        part_of_day = parts_of_day[1]
+    engine.say("Tere " + part_of_day + " , " + person + " !")
     engine.runAndWait()
     
 while person != None:
