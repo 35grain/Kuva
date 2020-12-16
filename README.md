@@ -8,3 +8,4 @@ Kasutatud teegid:
 4. [Google API Python Client](https://pypi.org/project/google-api-python-client/)
 5. [PySimpleGUI](https://pypi.org/project/PySimpleGUI/)
 6. [beautifulsoup](https://pypi.org/project/beautifulsoup4/)
+7. [EKI sünteeshääl](https://www.eki.ee/heli/)
