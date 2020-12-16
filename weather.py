@@ -1,6 +1,6 @@
 import requests, json
 
-def hangi_ilm():
+def get_weather():
     api_key = "d946f58d1732625bd819026dc87b70b0"
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
     city_name = "Tartu"

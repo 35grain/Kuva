@@ -1,12 +1,12 @@
 from datetime import *
 import speech_recognition as sr
 import pyttsx3
-from google_calendar import kuva_kalender
+from google_calendar import display_schedule
 import PySimpleGUI as sg
 from win32api import GetSystemMetrics
-from uudis import hangi_uudis
+from news import get_news
 import webbrowser
-from weather import hangi_ilm
+from weather import get_weather
 
 # Set up voice recognition and text to speech
 r = sr.Recognizer()
@@ -26,33 +26,33 @@ päeva_osad = ('hommikust','päevast','õhtust')
 def createwindow():
     layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Avaleht", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
-def createwindow2(ilm):
-    layout = [[sg.Text("Praegune ilm: " + "\n" + ilm)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+def createwindow2(weather):
+    layout = [[sg.Text("Praegune ilm: " + "\n" + weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Ilm", layout, no_titlebar=True, element_justification='c', size=(800,height), alpha_channel=0.9, keep_on_top=True, margins=(100, 50)).Finalize()
-def createwindow3(sündmused):
-    layout = [[sg.Text(sündmused)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Sündmused", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
+def createwindow3(events):
+    layout = [[sg.Text(events)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("events", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow4():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudis")], [sg.Button("Sulge rakendus")]] 
+    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudised")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Avaleht", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
-def createwindow5(uudis):
-    layout = [[sg.Text(uudis['title'], font=("Helvetica", 25))], [sg.Text(uudis['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
-    return sg.Window("Uudis", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
+def createwindow5(news):
+    layout = [[sg.Text(news['title'], font=("Helvetica", 25))], [sg.Text(news['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    return sg.Window("Uudised", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
-def isikusta(sisend, nimed):
+def identify(sisend, nimed):
     try:
         for variant in sisend['alternative']:
             for nimi in nimed:
                 if nimi.lower() in variant['transcript'].lower():
-                    isik = nimi
-                    return isik
+                    person = nimi
+                    return person
                 else:
-                    isik = None
+                    person = None
     except:
-        isik = None
+        person = None
         
-    return isik
+    return person
 
 # Listen for ambient noise
 with sr.Microphone() as source:
@@ -66,10 +66,10 @@ with sr.Microphone() as source:
     data = r.record(source, duration=5)
     sisend = r.recognize_google(data,show_all=True,language="fi")
 
-isik = isikusta(sisend,nimed)
+person = identify(sisend,nimed)
 
 #Display selection of names if unable to identify
-if isik == None:
+if person == None:
     engine.say("Ma ei saanud aru. Palun vali oma nimi ekraanilt.")
     engine.runAndWait()
     while True:
@@ -80,7 +80,7 @@ if isik == None:
             window.close()
             break
         else:
-            isik = event
+            person = event
             break
     window.close()
 else:
@@ -93,25 +93,25 @@ else:
         osa_päevast = päeva_osad[0]
     else:
         osa_päevast = päeva_osad[1]
-    engine.say("Tere " + osa_päevast + " , " + isik + " !")
+    engine.say("Tere " + osa_päevast + " , " + person + " !")
     engine.runAndWait()
     
-while isik != None:
+while person != None:
     window = createwindow4()
     window.Maximize()
     event, values = window.read()
     if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
         break
     elif event == "Ilmateade":
-        algne_ilm = hangi_ilm()
-        temperatuur = algne_ilm[0]
-        kirjeldus = algne_ilm[1]
-        tuul = algne_ilm[2]
-        ilm = ("Temperatuur on: " + str(temperatuur) + "°C" +
+        algne_weather = get_weather()
+        temperatuur = algne_weather[0]
+        kirjeldus = algne_weather[1]
+        tuul = algne_weather[2]
+        weather = ("Temperatuur on: " + str(temperatuur) + "°C" +
                "\n" + "Tuule kiirus on: " + str(tuul) + "m/s." +
-               "\n" + "Ilma kirjeldus on: " + kirjeldus + ".")
+               "\n" + "ilma kirjeldus on: " + kirjeldus + ".")
         window.close()
-        window2 = createwindow2(ilm)
+        window2 = createwindow2(weather)
         window2.Maximize()
         event, values = window2.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
@@ -120,9 +120,9 @@ while isik != None:
             window2.close()
             continue
     elif event == "Sündmused":
-        sündmused = kuva_kalender(isik)
+        events = display_schedule(person)
         window.close()
-        window3 = createwindow3(sündmused)
+        window3 = createwindow3(events)
         window3.Maximize()
         event, values = window3.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
@@ -130,10 +130,10 @@ while isik != None:
         elif event == "Tagasi":
             window3.close()
             continue
-    elif event == "Uudis":
-        uudis = hangi_uudis()
+    elif event == "Uudised":
+        news = get_news()
         window.close()
-        window5 = createwindow5(uudis)
+        window5 = createwindow5(news)
         window5.Maximize()
         event, values = window5.read()
         if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
@@ -143,7 +143,7 @@ while isik != None:
             continue
         elif event == "Loe edasi":
             window5.close()
-            webbrowser.open(uudis['link'])
+            webbrowser.open(news['link'])
             
 try:
     window.close()

@@ -7,7 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import PySimpleGUI as sg
 
-def kuva_kalender(USER_ID):
+def display_schedule(USER_ID):
     # User ID from identification application
 
     # If modifying these scopes, delete the file token.pickle.

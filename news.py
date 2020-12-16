@@ -3,7 +3,7 @@ import urllib.request
 import re
 from random import choice
 
-def hangi_uudis():
+def get_news():
     a = urllib.request.urlopen("https://uudised.err.ee/")
     data = a.read()
     soup = BeautifulSoup(data, features="html.parser")
@@ -21,6 +21,6 @@ def hangi_uudis():
     lead = soup.find("div", class_="lead").p.get_text()
     title = soup.find("h1").get_text().strip("({{contentCtrl.commentsTotal}})")
     
-    uudis = {'lead':lead,'title':title,'link':pick}
+    random_article = {'lead':lead,'title':title,'link':pick}
                 
-    return uudis
+    return random_article
