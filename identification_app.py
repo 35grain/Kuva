@@ -20,7 +20,7 @@ height = GetSystemMetrics(1)
 
 sg.theme('Dark Blue')
 
-nimed = ('Uku','Richard')
+names = ('Uku','Richard')
 päeva_osad = ('hommikust','päevast','õhtust')
 
 
@@ -42,12 +42,12 @@ def createwindow5(news):
     return sg.Window("Uudised", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
-def identify(sisend, nimed):
+def identify(data, names):
     try:
-        for variant in sisend['alternative']:
-            for nimi in nimed:
-                if nimi.lower() in variant['transcript'].lower():
-                    person = nimi
+        for variant in data['alternative']:
+            for name in names:
+                if name.lower() in variant['transcript'].lower():
+                    person = name
                     return person
                 else:
                     person = None
@@ -65,14 +65,14 @@ engine.runAndWait()
 
 # Listen for input
 with sr.Microphone() as source:
-    data = r.record(source, duration=5)
-    sisend = r.recognize_google(data,show_all=True,language="fi")
+    data = r.record(source, duration=4)
+    data = r.recognize_google(data,show_all=True,language="fi")
 
-person = identify(sisend,nimed)
+person = identify(data,names)
 
 #Display selection of names if unable to identify
 if person == None:
-    engine.say("Ma ei saanud aru. Palun vali oma nimi ekraanilt.")
+    engine.say("Ma ei saanud aru. Palun vali oma name ekraanilt.")
     engine.runAndWait()
     while True:
         window = createwindow()
