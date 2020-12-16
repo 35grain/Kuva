@@ -60,7 +60,7 @@ def display_schedule(USER_ID):
     if not events:
         display_events = 'Tänaseks on sündmused otsas.\nAeg uinakuks!'
     else:
-        display_events = 'Sinu tänased sündmused:\n\n'
+        display_events = ''
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
             end = event['end'].get('dateTime', event['end'].get('date'))

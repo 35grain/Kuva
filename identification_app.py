@@ -28,23 +28,23 @@ parts_of_day = ('hommikust','päevast','õhtust')
 sg.theme('Dark Blue')
 
 def createwindow():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
+    layout = [[sg.Text("Valikud:", font=("Helvetica", 20))], [sg.Button("Richard")], [sg.Button("Uku")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Kes sa oled?", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow2(weather):
-    layout = [[sg.Text("Praegune ilm: " + "\n" + weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    layout = [[sg.Text("Praegune ilm:", font=("Helvetica", 20))], [sg.Text(weather)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Ilm", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow3(events):
-    layout = [[sg.Text(events)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    layout = [[sg.Text("Sinu tänased sündmused:", font=("Helvetica", 20))], [sg.Text(events)], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Sündmused", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow4():
-    layout = [[sg.Text("Valikud:")], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudised")], [sg.Button("Sulge rakendus")]] 
+    layout = [[sg.Text("Valikud:", font=("Helvetica", 20))], [sg.Button("Ilmateade")], [sg.Button("Sündmused")], [sg.Button("Uudised")], [sg.Button("Sulge rakendus")]] 
     return sg.Window("Kuva", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow5(news):
-    layout = [[sg.Text(news['title'], font=("Helvetica", 25))], [sg.Text(news['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
+    layout = [[sg.Text(news['title'], font=("Helvetica", 20))], [sg.Text(news['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Uudised", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 def createwindow6():
-    layout = [[sg.Text("Isikutuvastus")], [sg.Button("Tuvastus")], [sg.Button("Sulge rakendus")]] 
-    return sg.Window("first page", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
+    layout = [[sg.Text("Isikutuvastus", font=("Helvetica", 20))], [sg.Button("Tuvastus")], [sg.Button("Sulge rakendus")]] 
+    return sg.Window("Kes sa oled?", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
 def identify(data, names):
