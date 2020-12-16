@@ -45,44 +45,44 @@ def kuva_kalender(USER_ID):
     events = []
 
     # Call the Calendar API
-    praegu = datetime.now().isoformat()
-    päeva_lõpp = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)).isoformat()
+    right_now = datetime.now().isoformat()
+    end_of_day = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)).isoformat()
 
     # Get events from all calendars
     for calendar in kalendrid['items']:
         id=calendar['id']
-        events_result = service.events().list(calendarId=id, timeMin=praegu + '+02:00',
-                                            timeMax=päeva_lõpp + '+02:00', timeZone='+02:00', singleEvents=True,
+        events_result = service.events().list(calendarId=id, timeMin=right_now + '+02:00',
+                                            timeMax=end_of_day + '+02:00', timeZone='+02:00', singleEvents=True,
                                             orderBy='startTime', maxResults=10).execute()
         events += events_result.get('items', [])
 
     # Output list of events
     if not events:
-        kuva_sündmusi = 'Tänaseks ei ole rohkem sündmusi kirjas.'
+        display_events = 'Tänaseks on sündmused otsas.\nAeg uinakuks!'
     else:
-        kuva_sündmusi = 'Sinu tänased sündmused:\n\n'
+        display_events = 'Sinu tänased sündmused:\n\n'
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
             end = event['end'].get('dateTime', event['end'].get('date'))
-            toimumispaik = ''
+            location = ''
             if len(start) < 11:
                 start = start.replace('-','.')
                 end = end.replace('-','.')
             
             split1 = start.split('T')
-            sõne1 = split1[1]
-            split2 = sõne1.split('+')
+            partial1 = split1[1]
+            split2 = partial1.split('+')
             start = split2[0]
 
             split3 = end.split('T')
-            sõne2 = split3[1]
-            split4 = sõne2.split('+')
+            partial2 = split3[1]
+            split4 = partial2.split('+')
             end = split4[0]
             
             try:
-                toimumispaik = event['toimumispaik']
-                kuva_sündmusi += start + '-' + end + '\n' + event['summary'] + '\n' + event['toimumispaik'] + '\n'
+                location = event['location']
+                display_events += start + '-' + end + '\n' + event['summary'] + '\n' + event['location'] + '\n'
             except:
-                kuva_sündmusi += start + '-' + end + '\n' + event['summary'] + '\n'
+                display_events += start + '-' + end + '\n' + event['summary'] + '\n'
     
-    return kuva_sündmusi
+    return display_events
