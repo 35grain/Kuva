@@ -8,6 +8,7 @@ import webbrowser
 from google_calendar import display_schedule
 from weather import get_weather
 from news import get_news
+from dictionary import translate
 
 # Set up voice recognition and text to speech
 r = sr.Recognizer()
@@ -41,6 +42,9 @@ def createwindow4():
 def createwindow5(news):
     layout = [[sg.Text(news['title'], font=("Helvetica", 25))], [sg.Text(news['lead'])], [sg.Button("Loe edasi")], [sg.Button("Tagasi"), sg.Button("Sulge rakendus")]]
     return sg.Window("Kuva: Uudised", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
+def createwindow6():
+    layout = [[sg.Text("Isikutuvastus")], [sg.Button("Tuvastus")], [sg.Button("Sulge rakendus")]] 
+    return sg.Window("first page", layout, element_justification='c', alpha_channel=0.9, margins=(100, 50), icon=r'icon.ico').Finalize()
 
 # Function for identifying users
 def identify(data, names):
@@ -60,94 +64,105 @@ def identify(data, names):
 # Listen for ambient noise
 with sr.Microphone() as source:
     r.adjust_for_ambient_noise(source)
-    
-engine.say("Tere! Kes sa oled?")
-engine.runAndWait()
-
-# Listen for input
-with sr.Microphone() as source:
-    data = r.record(source, duration=4)
-    data = r.recognize_google(data,show_all=True,language="fi")
-
-person = identify(data,names)
-
-#Display selection of names if unable to identify
-if person == None:
-    engine.say("Ma ei saanud aru. Palun vali oma name ekraanilt.")
-    engine.runAndWait()
-    while True:
-        window = createwindow()
-        window.Maximize()
-        event, values = window.read()
-        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
-            window.close()
-            break
-        else:
-            person = event
-            break
-    window.close()
-else:
-    #Greet based on time of the day
-    part_of_day = ""
-    tund = int(datetime.now().strftime("%H"))
-    if tund < 3 or tund > 16:
-        part_of_day = parts_of_day[2]
-    elif tund > 3 and tund < 12:
-        part_of_day = parts_of_day[0]
-    else:
-        part_of_day = parts_of_day[1]
-    engine.say("Tere " + part_of_day + " , " + person + " !")
-    engine.runAndWait()
-    
-while person != None:
-    window = createwindow4()
-    window.Maximize()
-    event, values = window.read()
+while True:
+    window6 = createwindow6()
+    window6.Maximize()
+    event, values = window6.read()
     if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
-        break
-    elif event == "Ilmateade":
-        algne_weather = get_weather()
-        temperatuur = algne_weather[0]
-        kirjeldus = algne_weather[1]
-        tuul = algne_weather[2]
-        weather = ("Temperatuur on: " + str(temperatuur) + "°C" +
-               "\n" + "Tuule kiirus on: " + str(tuul) + "m/s." +
-               "\n" + "ilma kirjeldus on: " + kirjeldus + ".")
-        window.close()
-        window2 = createwindow2(weather)
-        window2.Maximize()
-        event, values = window2.read()
-        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
-            break
-        elif event == "Tagasi":
-            window2.close()
-            continue
-    elif event == "Sündmused":
-        events = display_schedule(person)
-        window.close()
-        window3 = createwindow3(events)
-        window3.Maximize()
-        event, values = window3.read()
-        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
-            break
-        elif event == "Tagasi":
-            window3.close()
-            continue
-    elif event == "Uudised":
-        news = get_news()
-        window.close()
-        window5 = createwindow5(news)
-        window5.Maximize()
-        event, values = window5.read()
-        if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
-            break
-        elif event == "Tagasi":
-            window5.close()
-            continue
-        elif event == "Loe edasi":
-            window5.close()
-            webbrowser.open(news['link'])
-            
+        window6.close()
+        break 
+    elif event == "Tuvastus":
+        engine.say("Tere! Kes sa oled?")
+        engine.runAndWait()
+
+        # Listen for input
+        with sr.Microphone() as source:
+            data = r.record(source, duration=4)
+            data = r.recognize_google(data,show_all=True,language="fi")
+
+        person = identify(data,names)
+
+        #Display selection of names if unable to identify
+        if person == None:
+            engine.say("Ma ei saanud aru. Palun vali oma nimi ekraanilt.")
+            engine.runAndWait()
+            while True:
+                window6.close()
+                window = createwindow()
+                window.Maximize()
+                event, values = window.read()
+                if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
+                    window.close()
+                    break
+                else:
+                    person = event
+                    break
+            window.close()
+        else:
+            #Greet based on time of the day
+            part_of_day = ""
+            tund = int(datetime.now().strftime("%H"))
+            if tund < 3 or tund > 16:
+                part_of_day = parts_of_day[2]
+            elif tund > 3 and tund < 12:
+                part_of_day = parts_of_day[0]
+            else:
+                part_of_day = parts_of_day[1]
+            engine.say("Tere " + part_of_day + " , " + person + " !")
+            engine.runAndWait()
+    
+        while person != None:
+            window6.close()
+            window = createwindow4()
+            window.Maximize()
+            event, values = window.read()
+            if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
+                break
+            elif event == "Ilmateade":
+                algne_weather = get_weather()
+                temperatuur = algne_weather[0]
+                algne = algne_weather[1]
+                tuul = algne_weather[2]
+                kirjeldus = translate(algne)
+                weather = ("Temperatuur on: " + str(temperatuur) + "°C" +
+                       "\n" + "Tuule kiirus on: " + str(tuul) + "m/s." +
+                       "\n" + "ilm: " + kirjeldus + ".")
+                window.close()
+                window2 = createwindow2(weather)
+                window2.Maximize()
+                event, values = window2.read()
+                if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
+                    break
+                elif event == "Tagasi":
+                    window2.close()
+                    continue
+            elif event == "Sündmused":
+                events = display_schedule(person)
+                window.close()
+                window3 = createwindow3(events)
+                window3.Maximize()
+                event, values = window3.read()
+                if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
+                    break
+                elif event == "Tagasi":
+                    window3.close()
+                    continue
+            elif event == "Uudised":
+                news = get_news()
+                window.close()
+                window5 = createwindow5(news)
+                window5.Maximize()
+                event, values = window5.read()
+                if event == "Sulge rakendus" or event == sg.WIN_CLOSED:
+                    break
+                elif event == "Tagasi":
+                    window5.close()
+                    continue
+                elif event == "Loe edasi":
+                    window5.close()
+                    webbrowser.open(news['link'])
+        break        
+
 try:
     window.close()
 except:
@@ -166,5 +181,9 @@ except:
     nevermind_me = False
 try:
     window5.close()
+except:
+    nevermind_me = False
+try:
+    window6.close()
 except:
     nevermind_me = False
