@@ -7,6 +7,4 @@ Kasutatud teegid:
 3. [pyttsx3](https://pypi.org/project/pyttsx3/)
 4. [Google API Python Client](https://pypi.org/project/google-api-python-client/)
 5. [PySimpleGUI](https://pypi.org/project/PySimpleGUI/)
-6. [webbrowser](https://github.com/python/cpython/blob/3.9/Lib/webbrowser.py)
-7. [datetime](https://github.com/python/cpython/blob/3.9/Lib/datetime.py)
-8. [beautifulsoup](https://pypi.org/project/beautifulsoup4/)
+6. [beautifulsoup](https://pypi.org/project/beautifulsoup4/)
